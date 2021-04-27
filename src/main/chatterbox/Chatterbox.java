@@ -15,7 +15,7 @@ public class Chatterbox {
         Socket socket = new Socket();
 
 
-        chatterbox.createNewConnection("127.0.0.1", 0);
+        chatterbox.createNewConnection("example.com", 80);
 
 
 
