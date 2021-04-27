@@ -15,6 +15,43 @@ public class Chatterbox {
         Socket socket = chatterbox.createConnectionToTarget("2001:16b8:4570:5800:91f9:3143:2bcd:d7ca", 8050);
         chatterbox.waitForInputFromClient(socket);
 
+<<<<<<< HEAD
+=======
+
+        chatterbox.createNewConnection("example.com", 80);
+
+
+
+
+
+        //System.out.println(socket = reader.createNewConnection("192.168.64.2", 80));
+        // System.out.println(reader.readFromConnection(socket));
+        //System.out.println(reader.writeToConnection(socket));
+
+       // System.out.println(reader.setupLocalServer(80));
+
+
+        /*
+                ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+        executor.scheduleAtFixedRate(client.readMessageRunnable, 0, 200,
+                TimeUnit.MILLISECONDS);
+        Runnable readMessageRunnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (bufferedReader.ready()) {
+                        String message = readMessage();
+                        if (!message.isEmpty() && message != null) {
+                            System.out.println(message);
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+         */
+
+        socket.close();
+>>>>>>> 36e3e896e4cf5edc2dea9ff727664637903f16d1
     }
 
     /**
