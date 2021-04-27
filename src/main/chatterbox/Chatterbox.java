@@ -5,6 +5,9 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Chatterbox {
 
@@ -20,6 +23,25 @@ public class Chatterbox {
 
         System.out.println(reader.setupLocalServer(80));
 
+
+        /*
+                ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+        executor.scheduleAtFixedRate(client.readMessageRunnable, 0, 200,
+                TimeUnit.MILLISECONDS);
+        Runnable readMessageRunnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (bufferedReader.ready()) {
+                        String message = readMessage();
+                        if (!message.isEmpty() && message != null) {
+                            System.out.println(message);
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+         */
 
         socket.close();
     }
@@ -100,7 +122,7 @@ public class Chatterbox {
 
 
     /**
-     *
+     * Creates a local server
      * @param port
      * @return
      * @throws IOException
@@ -119,5 +141,40 @@ public class Chatterbox {
         }
 
     }
+
+
+    /**
+     * writes a message to server
+     * @param socket
+     * @param line
+     */
+    public void writeMessage(Socket socket, String line) {
+
+    }
+
+    /**
+     * waits for input from server
+     * @param socket
+     */
+    void waitForInput(Socket socket) {
+        System.out.println("Use the console to send messages.");
+        Scanner scanner = new Scanner(System.in);
+        try {
+            while (true) {
+                String line = scanner.nextLine();
+                try {
+                    writeMessage(socket, line);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        } catch (IllegalStateException e) {
+            // System.in has been closed
+            e.printStackTrace();
+        }
+    }
+
+
+
 
 }
