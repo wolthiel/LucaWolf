@@ -5,23 +5,27 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class Chatterbox {
 
     public static void main (String args[]) throws IOException {
 
-        Prelab reader = new Prelab();
+        Chatterbox chatterbox = new Chatterbox();
 
         Socket socket = new Socket();
+
+
+        chatterbox.createNewConnection("127.0.0.1", 0);
+
+
+
+
 
         //System.out.println(socket = reader.createNewConnection("192.168.64.2", 80));
         // System.out.println(reader.readFromConnection(socket));
         //System.out.println(reader.writeToConnection(socket));
 
-        System.out.println(reader.setupLocalServer(80));
+       // System.out.println(reader.setupLocalServer(80));
 
 
         /*
