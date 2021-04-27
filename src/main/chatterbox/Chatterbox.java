@@ -16,16 +16,9 @@ public class Chatterbox {
 
         Socket socket = chatterbox.createConnectionToServer("2001:16b8:4570:5800:91f9:3143:2bcd:d7ca", 8050);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
-        chatterbox.createNewConnection("127.0.0.1", 80);
-=======
         Runnable readMessageRunnable = new Runnable() {
             @Override
             public void run() {
->>>>>>> 47f0cdc5850278471ddbef7d5f23827c96288eb7
 
                 try {
                     chatterbox.readMessagesFromServer(socket);
