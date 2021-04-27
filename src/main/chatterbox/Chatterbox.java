@@ -15,10 +15,11 @@ public class Chatterbox {
         Chatterbox chatterbox = new Chatterbox();
         Socket socket = chatterbox.createConnectionToServer("2001:16b8:4570:5800:91f9:3143:2bcd:d7ca", 8050);
 
+
         /**
          * runnable for waitForInputFromClient
-         */
-        Runnable readMessageRunnable = new Runnable() {
+        **/
+        Runnable RunnableUserInput = new Runnable() {
             @Override
             public void run() {
                 chatterbox.waitForInputFromClient(socket);
@@ -28,7 +29,7 @@ public class Chatterbox {
         /**
          * runnable for readMessagesFromServer
          */
-        Runnable writeMessageRunnable = new Runnable() {
+        Runnable RunnableReadMessageFromServer = new Runnable() {
             @Override
             public void run() {
                 try {
@@ -43,8 +44,8 @@ public class Chatterbox {
          *  Scheduler that created threads and call the runnable
          */
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
-        executor.scheduleAtFixedRate(readMessageRunnable, 0, 200, TimeUnit.MILLISECONDS);
-        executor.scheduleAtFixedRate(writeMessageRunnable, 0, 200, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(RunnableUserInput, 0, 200, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(RunnableReadMessageFromServer, 0, 200, TimeUnit.MILLISECONDS);
 
         }
 
@@ -80,13 +81,11 @@ public class Chatterbox {
         System.out.println("Use the console to send messages.");
         Scanner scanner = new Scanner(System.in);
         try {
-            while (true) {
-                String line = scanner.nextLine();
-                try {
-                    writeMessageToSocket(socket, line);
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+            String line = scanner.nextLine();
+            try {
+                writeMessageToSocket(socket, line);
+            } catch (Exception e) {
+                System.out.println(e);
             }
         } catch (IllegalStateException e) {
             e.printStackTrace();
@@ -117,10 +116,7 @@ public class Chatterbox {
         InputStream inStream = socket.getInputStream();
         Scanner inScanner = new Scanner(inStream);
 
-        while(true) {
-            String input = inScanner.nextLine();
-            System.out.println(input);
-        }
+        System.out.println(inScanner.nextLine());
     }
 
 }
