@@ -12,8 +12,11 @@ public class Chatterbox {
 
         Chatterbox chatterbox = new Chatterbox();
 
-        Socket socket = new Socket();
+        Socket socket = chatterbox.createConnectionToTarget("2001:16b8:4570:5800:91f9:3143:2bcd:d7ca", 8050);
+        chatterbox.waitForInputFromClient(socket);
 
+<<<<<<< HEAD
+=======
 
         chatterbox.createNewConnection("127.0.0.1", 80);
 
@@ -48,6 +51,7 @@ public class Chatterbox {
          */
 
         socket.close();
+>>>>>>> 36e3e896e4cf5edc2dea9ff727664637903f16d1
     }
 
     /**
@@ -58,7 +62,7 @@ public class Chatterbox {
      * @return Socket, if connection was successful
      * @return null if connection was not successful
      */
-    public Socket createNewConnection(String host, int port) {
+    public Socket createConnectionToTarget(String host, int port) {
 
         try {
             System.out.println("Create new connection, please wait...");
@@ -74,37 +78,47 @@ public class Chatterbox {
         return null;
     }
 
-
     /**
-     * Reads a output from a given host.
-     * @param socket a socket object to read
-     * @throws IOException
-     * @return true if writing was successful
+     * wait for input from client
+     * @param socket
      */
-    public boolean readFromConnection(Socket socket) {
-
+    public void waitForInputFromClient(Socket socket) {
+        System.out.println("Use the console to send messages.");
+        Scanner scanner = new Scanner(System.in);
         try {
-
-            InputStream inStream = socket.getInputStream();
-            Scanner scanner = new Scanner(inStream);
-
-            System.out.println("Response: " + scanner.toString());
-
-        } catch (IOException e) {
+            while (true) {
+                String line = scanner.nextLine();
+                try {
+                    writeMessageToSocket(socket, line);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        } catch (IllegalStateException e) {
+            // System.in has been closed
             e.printStackTrace();
         }
-
-
-        return true;
     }
 
     /**
+     * writes a message to given socket
+     * @param socket
+     * @param line
+     */
+    public void writeMessageToSocket(Socket socket, String line) {
+
+    }
+
+
+
+    /*
+        /**
      * Writes a output to given host.
      * @param socket a socket object to write
      * @throws IOException
      * @return true if writing was successful
-     */
-    public boolean writeToConnection(Socket socket) {
+
+    p ublic boolean writeToConnection(Socket socket) {
 
         try{
 
@@ -125,13 +139,13 @@ public class Chatterbox {
     }
 
 
-    /**
+    / **
      * Creates a local server
      * @param port
      * @return
      * @throws IOException
-     */
-    public boolean setupLocalServer(int port) throws IOException {
+     
+    p ublic boolean setupLocalServer(int port) throws IOException {
 
         ServerSocket server = new ServerSocket(port);
         System.out.println("Waiting for clients to connect...");
@@ -147,38 +161,7 @@ public class Chatterbox {
     }
 
 
-    /**
-     * writes a message to server
-     * @param socket
-     * @param line
      */
-    public void writeMessage(Socket socket, String line) {
-
-    }
-
-    /**
-     * waits for input from server
-     * @param socket
-     */
-    void waitForInput(Socket socket) {
-        System.out.println("Use the console to send messages.");
-        Scanner scanner = new Scanner(System.in);
-        try {
-            while (true) {
-                String line = scanner.nextLine();
-                try {
-                    writeMessage(socket, line);
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-            }
-        } catch (IllegalStateException e) {
-            // System.in has been closed
-            e.printStackTrace();
-        }
-    }
-
-
 
 
 }
