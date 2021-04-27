@@ -10,39 +10,48 @@ import java.util.concurrent.TimeUnit;
 
 public class Chatterbox {
 
-        public static void main (String args[]) throws IOException {
+    public static void main (String args[]) throws IOException {
 
         Chatterbox chatterbox = new Chatterbox();
-
         Socket socket = chatterbox.createConnectionToServer("2001:16b8:4570:5800:91f9:3143:2bcd:d7ca", 8050);
 
+        /**
+         * runnable for waitForInputFromClient
+         */
         Runnable readMessageRunnable = new Runnable() {
             @Override
             public void run() {
+                chatterbox.waitForInputFromClient(socket);
+            }
+        };
 
+        /**
+         * runnable for readMessagesFromServer
+         */
+        Runnable writeMessageRunnable = new Runnable() {
+            @Override
+            public void run() {
                 try {
                     chatterbox.readMessagesFromServer(socket);
-                    chatterbox.waitForInputFromClient(socket);
-
-
                 } catch (IOException e) {
-
                     e.printStackTrace();
-
                 }
+            }
+        };
 
-            } };
-
-            ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
-            executor.scheduleAtFixedRate(readMessageRunnable, 0, 200, TimeUnit.MILLISECONDS);
-
+        /**
+         *  Scheduler that created threads and call the runnable
+         */
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+        executor.scheduleAtFixedRate(readMessageRunnable, 0, 200, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(writeMessageRunnable, 0, 200, TimeUnit.MILLISECONDS);
 
         }
 
     /**
      * Creates a new connection to given host, port
-     * @param host
-     * @param port
+     * @param host url of target
+     * @param port of target
      *
      * @return Socket, if connection was successful
      * @return null if connection was not successful
@@ -65,7 +74,7 @@ public class Chatterbox {
 
     /**
      * wait for input from client
-     * @param socket
+     * @param socket object
      */
     public void waitForInputFromClient(Socket socket) {
         System.out.println("Use the console to send messages.");
@@ -80,15 +89,14 @@ public class Chatterbox {
                 }
             }
         } catch (IllegalStateException e) {
-            // System.in has been closed
             e.printStackTrace();
         }
     }
 
     /**
      * writes a message to given socket
-     * @param socket
-     * @param line
+     * @param socket object
+     * @param line written line
      */
     public void writeMessageToSocket(Socket socket, String line) throws IOException {
 
@@ -96,13 +104,13 @@ public class Chatterbox {
         PrintWriter out = new PrintWriter(outStream);
         out.print(line + "\n");
         out.flush();
-        System.out.println("Message wurde gesendet");
+        System.out.println("Message was send");
 
     }
 
     /**
      * reads messages that are send from server
-     * @param socket
+     * @param socket object
      * @throws IOException
      */
     public void readMessagesFromServer(Socket socket) throws IOException {
